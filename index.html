@@ -1,52 +1,101 @@
+
 <!DOCTYPE html>
-
- 
-
 <html lang="en">
+<head>
 
  
-
-<head>
 
     <meta charset="UTF-8">
 
+ 
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Mine sweeper</title>
-
-    <link rel="stylesheet" href="css/css.css">
-
-</head>
 
  
 
-<body onload="onInit()">
+    <title>Mine sweeper</title>
+
+ 
+
+    <link rel="stylesheet" href="css/css.css">
+
+ 
+
+</head>
+<body>
+
+ 
 
     <img class="title" src="img/Title.jpg">
 
+    <button class="changeMode" onclick="manageModes()"><span>Turn to DARKMODE</span></button>
+
+    <button class="level" onclick="restart(4,2)">Beginner</button>
+
+    <button class="level" onclick="restart(8,14)">Medium</button>
+
+    <button class="level" onclick="restart(12,32)">Expert</button>
+
+
+
+
     <h2 class="display"><span></span></h2>
 
-    <img class="hint" onclick="hintClicked(this)" src="img/bulb.png"/>
+ 
+
+    <h2 class="timer"><span>0</span>sec</h2>
+
+    <button class="safeClick" onclick="onSafeClick()">SAFE CLICK</button>
+
+
+
 
     <img class="hint" onclick="hintClicked(this)" src="img/bulb.png"/>
 
+ 
+
     <img class="hint" onclick="hintClicked(this)" src="img/bulb.png"/>
+
+ 
+
+    <img class="hint" onclick="hintClicked(this)" src="img/bulb.png"/>
+
+ 
+
+ 
 
  
 
     <div  class="button"></div>
 
+ 
+
     <table>
+
+ 
 
         <tbody class="board"></tbody>
 
+ 
+
     </table>
 
+ 
+
     <script src="js/game.js"></script>
+
     <script src="js/utils.js"></script>
+
     <script src="js/elements.js"></script>
+
     <script src="js/negs.js"></script>
+
+ 
 
 </body>
 
+ 
+
 </html>
+
+ 
