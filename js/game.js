@@ -30,9 +30,9 @@ function restart(SIZE,MINES){
     gGame.markedCount = 0
     hideHintColor()
     gGame.revealedCount = 0
+    alreadyRevealed = []
     onInit()
 }
-// manageModes()
 function onInit(){
     gGame.isVictory = false
     gGame.isOn = true
@@ -45,6 +45,7 @@ function onInit(){
     showHints()
     showSafeClick()
     showMegaHint()
+    showMineExt()
 }
 function buildBoard(){
     var board = []
@@ -180,13 +181,11 @@ function showAllMines(){
         }
     }
 }
-
 function startTime(){
     stopTime()
     time = Date.now()
     gTimeInterval=setInterval(renderTime,100)
 }
-
 function renderTime(){
     var currTime = Date.now()
     var diff = currTime - time
@@ -194,15 +193,9 @@ function renderTime(){
     var elTimer = document.querySelector('.timer span')
     elTimer.innerHTML = (gGame.secPassed/1000).toFixed(3)
 }
-
- 
-
 function stopTime(){
     clearInterval(gTimeInterval)
 }
-
- 
-
 function handleEmptyCellClicked(elCell,idx,jdx){
     for(var i=idx-1;idx+1>=i;i++){
         if(0>i||i>=gBoard.length) continue

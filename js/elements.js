@@ -2,6 +2,8 @@
 
 var coordsArr = []
 var cnt = 0
+var alreadyRevealed = []
+
 
 const SMILY_NORMAL =  `<img class="smily"  onclick="restart(${gLevel.SIZE},${gLevel.MINES})" src="img/smily normal.png"/>`
 const SMILY_GLASSES = `<img class="smily"  onclick="restart(${gLevel.SIZE},${gLevel.MINES})" src="img/glasses.png"/>`
@@ -93,18 +95,27 @@ function revealArea(startI,stopI,startJ,stopJ){
     for(var i = startI;stopI>=i;i++){
         for(var j=startJ;stopJ>=j;j++){
             var cell = gBoard[i][j]
-            cell.isRevealed = true
-            var value = (cell.isMine)? MINE : (cell.minesAround)? cell.minesAround : EMPTY
-            renderCell({i,j},value)
+            var cellLocation = {i,j}
+            if (cell.isRevealed){
+                alreadyRevealed.push(`${i},${j}`)
+            }else{
+                cell.isRevealed = true
+                var value = (cell.isMine)? MINE : (cell.minesAround)? cell.minesAround : EMPTY
+                renderCell(cellLocation,value)
+            } 
+            
         }
     }  
 }
 function hideArea(startI,stopI,startJ,stopJ){
+    console.log(alreadyRevealed)
     for(var i = startI;stopI>=i;i++){
         for(var j=startJ;stopJ>=j;j++){
             var cell = gBoard[i][j]
+            var cellLocation = {i,j}
+            if(alreadyRevealed.indexOf(`${i},${j}`)!==-1)continue
             cell.isRevealed = false
-            renderCell({i,j},EMPTY)
+            renderCell(cellLocation,EMPTY)
         }
     }  
 }
@@ -149,27 +160,70 @@ function addSafeCell(safeCellLocation){
     }, 1500);
   renderCell(safeCellLocation,EMPTY)
 }
+manageModes()
+
 function manageModes(){
   
-    // gGame.isDarkMode = !gGame.isDarkMode
+    gGame.isDarkMode = !gGame.isDarkMode
   
-    // if(gGame.isDarkMode)handleDarkMode()
+    if(gGame.isDarkMode)handleDarkMode()
   
-    // else handleLightMode()
+    else handleLightMode()
   
-    // var elButton = document.querySelector('.changeMode span')
+    var elButton = document.querySelector('.changeMode span')
   
-    // elButton.innerHTML = (gGame.isDarkMode)? 'Turn to LIGHTMODE' : 'Turn to DARKMODE'
+    elButton.innerHTML = (gGame.isDarkMode)? 'Turn to LIGHTMODE' : 'Turn to DARKMODE'
   
 } 
 function handleLightMode(){
     var elBody = document.querySelector('body')
     elBody.style.backgroundColor = 'antiquewhite'
 }
-  function handleDarkMode(){
+function handleDarkMode(){
     var elBody = document.querySelector('body')
     elBody.style.backgroundColor = 'rgb(36, 37, 38)'
 }
-  
-  
- 
+function showMineExt(){
+    var elMineExt = document.querySelector('.mineEx')
+    elMineExt.style.display = 'block'
+}
+function onMineExt(){
+    if (gLevel.MINES<3)return
+    for (var i = 0 ; 3>i;i++){
+        var allMinesLoc = getAllMinesLocation()
+        var randomMineLocation = getRandMineCellLocation(allMinesLoc)
+        var cell = gBoard[randomMineLocation.i][randomMineLocation.j]
+        removingMine(cell,randomMineLocation)
+    }
+}
+function getAllMinesLocation(){
+    var allMines = []
+    for(var i=0;gLevel.SIZE>i;i++){
+        for(var j=0;gLevel.SIZE>j;j++){
+            var cell = gBoard[i][j]
+            var cellLocation = {i,j}
+            if(cell.isMine) allMines.push(cellLocation)
+        }
+    }
+    return allMines
+}
+function getRandMineCellLocation(arr){
+    var randIdx = getRandInt(0,arr.length)
+    var randMineCellLocation = arr[randIdx]
+    arr.splice(randIdx,1)
+    return randMineCellLocation
+}
+function removingMine(cell,location){
+    cell.isMine = false
+    gLevel.MINES--
+    renderCell(location,EMPTY)
+    updateNegs()
+}
+function updateNegs(){
+    for (var i=0;gLevel.SIZE>i;i++){
+        for(var j=0;gLevel.SIZE>j;j++){
+            var negsCnt = checkNegsCount(i,j)
+            gBoard[i][j].minesAround = negsCnt
+        }
+    }
+} 

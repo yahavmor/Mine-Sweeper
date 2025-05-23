@@ -24,7 +24,7 @@ function renderCell(location,value){
     var elCell = document.querySelector(selcector)
     elCell.innerHTML = value
     if(cell.isRevealed)elCell.style.backgroundColor = (gBoard[location.i][location.j].isMine)? 'red':'darkgrey'    
-    else elCell.style.backgroundColor ='antiquewhite'  
+    else elCell.style.backgroundColor =''  
     if(gGame.safeClick.isSafeClick) elCell.style.backgroundColor = 'lightskyblue'        
 }
 
